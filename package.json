@@ -1,0 +1,25 @@
+{
+  "name": "privacyguard-kenya",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "PRIVACYGUARD_LOCAL=1 NEXT_TELEMETRY_DISABLED=1 next dev --webpack --hostname 127.0.0.1 --port 8767",
+    "build": "NEXT_TELEMETRY_DISABLED=1 next build --webpack",
+    "start": "PRIVACYGUARD_LOCAL=1 NEXT_TELEMETRY_DISABLED=1 next start --hostname 127.0.0.1 --port 8767",
+    "test": "node --experimental-strip-types --disable-warning=ExperimentalWarning --test tests/*.test.ts",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@electric-sql/pglite": "https://registry.npmjs.org/@electric-sql/pglite/-/pglite-0.5.8.tgz",
+    "next": "16.4.2",
+    "react": "19.2.7",
+    "react-dom": "19.2.7"
+  },
+  "devDependencies": {
+    "@types/node": "22.20.5",
+    "@types/react": "19.2.15",
+    "@types/react-dom": "19.2.3",
+    "typescript": "5.9.3"
+  }
+}

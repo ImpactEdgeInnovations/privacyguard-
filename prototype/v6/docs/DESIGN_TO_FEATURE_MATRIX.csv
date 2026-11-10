@@ -1,0 +1,29 @@
+Requirement ID,Experience,Prototype reference,Visible intent,Required backend/engine,Behavior to validate,Critical acceptance rule
+PG-01,Public,Landing / hero,ODPC and potential compensation proposition; primary report CTA,"Marketing content, none",CTA to evidence flow; disclaimers,Mobile hero readability; accessible CTA
+PG-02,Public,How it works / ODPC education,Explain company-first path and free ODPC filing,Curated content and source versions,Education section and ODPC external link,No affiliation or compensation guarantee
+PG-03,Public,Primary action,"One evidence-first flow, no duplicate start pathways",App routing,Open report wizard,Single unambiguous starting action
+PG-04,Public,Service choice after check,Free self-service vs optional paid assistance,Products/receipts in later phase,Never charge before disclosure,"Price, scope, total and optionality visible"
+PG-05,Consumer,New report wizard,"Screenshot/channel, sender/company, date, opt-out, accuracy",Case service + private evidence store,Create private DRAFT/READY_FOR_SCREENING case,"Errors, offline, duplicates, redaction"
+PG-06,Consumer,ODPC identity handoff,"No ID images in app, official portal direct",Pack builder + external deep link,Open official portal after approved pack,No ID fields in PrivacyGuard
+PG-07,Consumer,Login / verification,"Phone or email verification, recovery",Supabase Auth + vetted OTP,Verified consumer case ownership,Rate limit and anti-takeover
+PG-08,Consumer,Privacy controls / permissions,"Distinct case processing, company authority, ODPC approval",Versioned authorisation registry,Action gates checked at send-time,Withdrawals auditable
+PG-09,Consumer,My dashboard / cases,Next action and separate company/ODPC milestones,Event stream + case read API,Show only real confirmed states,No misleading percent bar
+PG-10,Consumer,Company response / resolution,Read reply and choose close/clarify/escalate,Inbound email + reviewer summary,Record specific decision,Company compliance ≠ case closure
+PG-11,Consumer,ODPC pack preparation,Reproducible pack with only case-relevant evidence,"Pack generator, source manifest",Preview/download; explicit approval,Pack generated ≠ filed
+PG-12,Consumer,ODPC handoff / reference,"Official portal, customer files ID there, return ref",Manual case admin + verification,Save consumer-reported ref as unverified,Official ack separate
+PG-13,Consumer,Notifications / case activity,Company updates and regulator communications,Email/SMS queue + event audit,"Show source, next action, due date",No fabricated updates
+PG-14,Consumer,Privacy centre,"Scope, revocation, deletion/help",Privacy request / retention engine,User manage existing permissions,Explain limits and lawful retention
+PG-15,Operations,New evidence review,"Missing fields, risk flags, evidence screening","Evidence scanner, abuse heuristics",Approve/hold/follow-up,Fraud flag not legal finding
+PG-16,Operations,Company directory,Brand/alias to legal entity and privacy contact,Source-backed directory + review history,"Manual verify unknowns, revalidate contacts",No guessed company emails
+PG-17,Operations,Notice editor and send gate,Preview/specific authority/status,"Outbox, email provider, auth registry",Send only approved notice,Idempotent and cancel-on-withdrawal
+PG-18,Operations,Email trail / correspondence,"Sent, accepted, bounced, inbound, ODPC filter",Inbound/outbound message records + MIME storage,Actionable reply queue,"Sender authentication, PII minimisation"
+PG-19,Operations,Deadline alerts,Per-right and regulator due dates,"Rules engine, scheduler, event journal",Escalate due tasks,Versioned and trigger-based clocks
+PG-20,Operations,Overview / pipelines,Overall cases by action and stage,Aggregated case/event queries,Click through to exception queue,Aggregate ≠ fake completion %
+PG-21,Operations,Individual case workspace,All evidence/permissions/company and ODPC messages,Role-limited case API + audit logs,Complete chronological actions,Staff access logged
+PG-22,Operations,ODPC tracker,"Submitted, ack, inquiry, outcome, appeal, paid","ODPC tracking records, human verification",Require proof before official status,Award and receipt distinct
+PG-23,Operations,Security and role controls,Least privilege and privacy safeguards,"RLS, MFA, encryption, logging",Authorized access only,Red-team role isolation
+PG-24,Consumer,Optional payment choice,Fee after free check; no hidden surprises,"Daraja later, billing ledger",User pays for agreed optional service,No ODPC filing fee
+PG-25,Deferred,Group claims,Not in v1,N/A,Do not implement,Requires separate approval
+PG-26,Deferred,Automatic ODPC API,Not approved,N/A,Do not implement,Requires ODPC authorisation
+PG-27,Deferred,AI legal verdict,Not approved,N/A,Do not implement,No automatic liability
+PG-28,Deferred,Native apps/inbox scanning,Not approved,N/A,Do not implement,PWA only

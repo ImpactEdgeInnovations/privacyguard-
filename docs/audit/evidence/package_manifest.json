@@ -1,0 +1,164 @@
+{
+  "packaged_date": "2026-11-10",
+  "research_cutoff": "2026-11-04",
+  "scope": "Audit and standalone design proposals only; no development authorised",
+  "manifest_excludes_itself": true,
+  "files": [
+    {
+      "path": "01_EXECUTIVE_ASSESSMENT.md",
+      "bytes": 7845,
+      "sha256": "c17d7314f7c774c7a3a55f90324a02cf56194acb88d535c89e5de8e1e548eb32"
+    },
+    {
+      "path": "02_BUSINESS_AND_COSTS.md",
+      "bytes": 11255,
+      "sha256": "2d745d4af7186e69ff17985c164cf813ebd056aa96552f79e2b2f3d9b124c650"
+    },
+    {
+      "path": "03_LEGAL_AND_REGULATORY.md",
+      "bytes": 17170,
+      "sha256": "aabbbcc6a2cd1f85b7add957c9a6b26481eb5725e168f1b1e550a72efe68f3ef"
+    },
+    {
+      "path": "04_JOURNEYS_AND_OPERATIONS.md",
+      "bytes": 14076,
+      "sha256": "558114ba171df3a7a75b0a2784bda12bc183040c1e6d8fdc3eab0e98d9dbb25a"
+    },
+    {
+      "path": "05_DESIGN_REVIEW.md",
+      "bytes": 12138,
+      "sha256": "b82d569dfe56588f27a1cd3003555ac42844c21786d260b8a968013969c2ab1f"
+    },
+    {
+      "path": "06_FEATURE_ALIGNMENT.csv",
+      "bytes": 17230,
+      "sha256": "6068f97b2ab0c1535a30b5b0d54ac0438a0fab6d238d62f13e36270e908c7e62"
+    },
+    {
+      "path": "07_ARCHITECTURE_PRIVACY_SECURITY.md",
+      "bytes": 18086,
+      "sha256": "02efc08e01900ba97ab68b08f789a23742555d117ba98f72bb6143a3412c65ee"
+    },
+    {
+      "path": "08_ROADMAP.md",
+      "bytes": 13077,
+      "sha256": "54de7b47cc8cd3c6f56a6586b84d3749b109695ccbefc9edb883b993c72a8aae"
+    },
+    {
+      "path": "09_FINDINGS_REGISTER.csv",
+      "bytes": 8851,
+      "sha256": "b44578807a3a4e0e03412b5295d830470d1fc71fd5baaeaf10c3c047ff512534"
+    },
+    {
+      "path": "10_OWNER_DECISIONS.md",
+      "bytes": 6589,
+      "sha256": "511edb2e296b029c70fc67db95f00e3adf5d4bca8c28a7b34255b4d3253d6d85"
+    },
+    {
+      "path": "11_EVIDENCE_AND_COVERAGE.md",
+      "bytes": 11587,
+      "sha256": "05bb3251520c6152cc016d319ebc6131a94f52b4df74d562c4b949ab19a3ce69"
+    },
+    {
+      "path": "12_SOURCES.md",
+      "bytes": 8011,
+      "sha256": "cc5f159bdeff7fdb35e7bc9f4bbed506c04ced6c58ebcec3110967bdae5669d9"
+    },
+    {
+      "path": "README.md",
+      "bytes": 3996,
+      "sha256": "a3027e572976325ba1e03520e9523cafad20d6f31c10f8e94d3eb4c2a0ec9d4a"
+    },
+    {
+      "path": "data/build_cost_model.py",
+      "bytes": 1341,
+      "sha256": "95460be9cf5405769213814d8e329e6b9530caa5b37379892ff307b36bd8b5a3"
+    },
+    {
+      "path": "data/build_registers.py",
+      "bytes": 26642,
+      "sha256": "bb7721907118f600eb9b77e9b150c58d06b91293fcc309d6d62d3aaedc26c301"
+    },
+    {
+      "path": "data/cost_scenarios.csv",
+      "bytes": 1752,
+      "sha256": "f5cf2c5130b2a89afdd89a060f29af2ca63604c017dc4b967f993a3f8003f471"
+    },
+    {
+      "path": "data/pricing_sensitivity.csv",
+      "bytes": 5576,
+      "sha256": "6d55313ab9e7108e38fb1cb0ac030d436af7a8c4af787ccd80bb8b88ea230c24"
+    },
+    {
+      "path": "data/validate_audit.py",
+      "bytes": 3896,
+      "sha256": "8cb7b85b285f251cc199160ff00b0396cc0d8598f432338368dbfc9ed0d8f14f"
+    },
+    {
+      "path": "evidence/artifact_validation.json",
+      "bytes": 1509,
+      "sha256": "05ca1748f5670d0a4b30c4d51e3643896e9238f3d9b4e33bd77e647d5d744391"
+    },
+    {
+      "path": "evidence/baseline_integrity.json",
+      "bytes": 9428,
+      "sha256": "ecf11f49dfe4ea50bf412c8b6b833a88b49d077a1c5586dd0a1999c4b2c9e3b5"
+    },
+    {
+      "path": "evidence/proposed-comparison-desktop.png",
+      "bytes": 127177,
+      "sha256": "6a8a0090ae212522ad3eb9295ac5afa2ebceb98aeebcd5dfd71e0c0975990c32"
+    },
+    {
+      "path": "evidence/proposed-consumer-choices-desktop.png",
+      "bytes": 151845,
+      "sha256": "0bbc34298f741990dc6b1eebd5700fb76f4b24fcd07762e1621215d1cfe3b0ae"
+    },
+    {
+      "path": "evidence/proposed-intake-mobile-360.png",
+      "bytes": 42353,
+      "sha256": "8d9c23ea7912f923ca26380656796d2147db8995cbfbedefbcc569aea9fc7628"
+    },
+    {
+      "path": "evidence/proposed-operations-desktop.png",
+      "bytes": 121633,
+      "sha256": "b3c6d15a17eca1beb87ca03246bd42ebae53db53daf6f179f262c81091e7872d"
+    },
+    {
+      "path": "evidence/proposed-operations-mobile-360.png",
+      "bytes": 41412,
+      "sha256": "bdd51ba59089b57f599a0d343e5021db48f0351681823c102163d0ccc74200f0"
+    },
+    {
+      "path": "evidence/v6-clarification-state-conflict.png",
+      "bytes": 221209,
+      "sha256": "3c98205f66a710cbe93c344b1663eeb2277d56f34e57ae8547b9befeb8ca6aec"
+    },
+    {
+      "path": "evidence/v6-mobile-home-390.png",
+      "bytes": 170552,
+      "sha256": "ab0fe07c7674e54c518b1d2ac78f76679678fd0dd90e95ceff54fcb9d28cc570"
+    },
+    {
+      "path": "mockups/baseline/v6_mobile_consumer.png",
+      "bytes": 316399,
+      "sha256": "fc1602350aedd16cee83fa8888dabb10e13208d723d3eff05f6130409712cbc7"
+    },
+    {
+      "path": "mockups/baseline/v6_mobile_landing.png",
+      "bytes": 633384,
+      "sha256": "0ae4e86172357cb76af2b504a2eb90c60b17462d2b6e0d36c4642356f347d2a3"
+    },
+    {
+      "path": "mockups/baseline/v6_mobile_odpc_handoff.png",
+      "bytes": 252702,
+      "sha256": "baeeb3b50d6ade76f3008d4892fb99d09875c8082723b40e208c8c077b1cd7d8"
+    },
+    {
+      "path": "mockups/index.html",
+      "bytes": 36170,
+      "sha256": "f50634a203858ff9262df9f46ca3dfe2c742f73969ec92e96ffca7ade6e2f29f"
+    }
+  ],
+  "repository_import": "Portable repository paths and validation script. All listed hashes describe this copy."
+}

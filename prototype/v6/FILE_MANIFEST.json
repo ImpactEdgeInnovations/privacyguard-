@@ -1,0 +1,150 @@
+{
+  "generated": "2026-11-03",
+  "files": [
+    {
+      "file": "AGENTS.md",
+      "bytes": 3604,
+      "sha256": "9a06bba58f64c91915add14002a0ce360c0615186892f247ed00046ac5fe8780"
+    },
+    {
+      "file": "OPEN_DESIGN_REVIEW.html",
+      "bytes": 8015,
+      "sha256": "7288954e8df33bd36179b8a85b5904573e8666a4b7cc4cd16bf9aa722872e836"
+    },
+    {
+      "file": "README.md",
+      "bytes": 3084,
+      "sha256": "76527ac5af3d3f10bea2bdfe038df461ea84b74b9d4cca345a0ca63cca41ad57"
+    },
+    {
+      "file": "docs/ARCHITECTURE.md",
+      "bytes": 3363,
+      "sha256": "879840fb64505622f10550878944c2529cf4c1d0a724f446aec2792ee540f23b"
+    },
+    {
+      "file": "docs/DECISION_LOG.md",
+      "bytes": 2610,
+      "sha256": "4e3a3b89550e802e4fe563e567b023e4a0822ee4e2fc5d394c8e22029c3d2d58"
+    },
+    {
+      "file": "docs/DESIGN_TO_FEATURE_MATRIX.csv",
+      "bytes": 4894,
+      "sha256": "c3568ca4c9540af6f84517f6ddcc010f6d7bdf3fd722610fda9ca060ce47d997"
+    },
+    {
+      "file": "docs/DESIGN_TO_FEATURE_MATRIX.md",
+      "bytes": 2991,
+      "sha256": "b27e52fda80417431859cf8d32e0b6c4e00af21b1b026a1e695e33f987f32aed"
+    },
+    {
+      "file": "docs/OPEN_DECISIONS.md",
+      "bytes": 2685,
+      "sha256": "692a3f336c70e0c02d480ea7aa8dfd77d850f74bcfe7c48bfedfb7d247f490ec"
+    },
+    {
+      "file": "docs/PRODUCT_REQUIREMENTS.md",
+      "bytes": 4591,
+      "sha256": "be7eaaa41ca5e48a529a554a0d1b2d3084a42c22296488ff84250767385e7ecb"
+    },
+    {
+      "file": "docs/PROJECT_MASTER.md",
+      "bytes": 3791,
+      "sha256": "c1a8ce3bb507a80f6132a2f3986e666f68ca4b68a78314c7187f572947772f83"
+    },
+    {
+      "file": "docs/ROADMAP.md",
+      "bytes": 3113,
+      "sha256": "a1e613f668d0e2efe06b24b4e3b68c10513bffd10ffbf2429708b86834192bf7"
+    },
+    {
+      "file": "docs/SECURITY_AND_PRIVACY.md",
+      "bytes": 3295,
+      "sha256": "9d1c1f581f42620dfa1eb35920b646bbedbdf0d8826a417ecfa6f8af688d2bf9"
+    },
+    {
+      "file": "docs/WORKFLOW_AND_STATES.md",
+      "bytes": 4607,
+      "sha256": "726018cc9fbd9d9ad0ebdeaa06f2ef026b2c3ddbfa5bd6dad1d867111bafa905"
+    },
+    {
+      "file": "prompts/01_ASTRA_AUDIT_NO_CODING.md",
+      "bytes": 5000,
+      "sha256": "1b307eaf306cec19ddbd8370042d5b6de73ae59e8dd424782a89c5452055f4bf"
+    },
+    {
+      "file": "prompts/02_CODEX_BUILD_AFTER_APPROVAL.md",
+      "bytes": 2730,
+      "sha256": "ff9b08ce239c6a2f84256e9dd8adabbeb785ebade675e5f324e3859d6c4f1e66"
+    },
+    {
+      "file": "prototype/PROTOTYPE_USAGE.md",
+      "bytes": 4764,
+      "sha256": "c5645a5e667613e08684cc2638246683b94cea493f4144cbe2e471cf26bfb248"
+    },
+    {
+      "file": "prototype/index.html",
+      "bytes": 182295,
+      "sha256": "8c3fc970ccf17c4867d61088aa0c641919b4f23cc2a231124a43fb672ee797d1"
+    },
+    {
+      "file": "prototype/previews/v6_desktop_consumer.png",
+      "bytes": 487390,
+      "sha256": "126ab2361aa45922f3fd322b9fac74306983aa75e0ea8f64cb1110dd8172fb9d"
+    },
+    {
+      "file": "prototype/previews/v6_desktop_landing.png",
+      "bytes": 945999,
+      "sha256": "5dd5228bdfca52ca4cc46ac4bfbaba1e7330ac6306fb575dfdb2bb4d6f8fbcd0"
+    },
+    {
+      "file": "prototype/previews/v6_desktop_odpc_handoff.png",
+      "bytes": 354767,
+      "sha256": "6bfafd65c1150aea47b58d05724ca7f5232517c1406ebab19248155ac71a9e7b"
+    },
+    {
+      "file": "prototype/previews/v6_desktop_operations.png",
+      "bytes": 222008,
+      "sha256": "d956ba8c103a76ff7c54e2464861f75dadd521abe4d6b881e8cca744b07c6902"
+    },
+    {
+      "file": "prototype/previews/v6_mobile_consumer.png",
+      "bytes": 316399,
+      "sha256": "fc1602350aedd16cee83fa8888dabb10e13208d723d3eff05f6130409712cbc7"
+    },
+    {
+      "file": "prototype/previews/v6_mobile_landing.png",
+      "bytes": 633384,
+      "sha256": "0ae4e86172357cb76af2b504a2eb90c60b17462d2b6e0d36c4642356f347d2a3"
+    },
+    {
+      "file": "prototype/previews/v6_mobile_odpc_decision.png",
+      "bytes": 200259,
+      "sha256": "c0cf596293ea3ce0ec61dea90bbe23d15add51504f45d31f49cea7313b816672"
+    },
+    {
+      "file": "prototype/previews/v6_mobile_odpc_handoff.png",
+      "bytes": 252702,
+      "sha256": "baeeb3b50d6ade76f3008d4892fb99d09875c8082723b40e208c8c077b1cd7d8"
+    },
+    {
+      "file": "prototype/previews/v6_mobile_operations.png",
+      "bytes": 159945,
+      "sha256": "f5ab55beb597afd7b9db02f02f8c26fbf14e59ed80735644b71d23f23be371c1"
+    },
+    {
+      "file": "prototype/previews/v6_mobile_privacy.png",
+      "bytes": 207685,
+      "sha256": "598d79cad05db1bef45a679de1da15b78d448fa46b3ad127c12bf7b0ebcb2a36"
+    },
+    {
+      "file": "reference/ODPC_RESEARCH_REFERENCE_2026-11-03.md",
+      "bytes": 31905,
+      "sha256": "cbe33af4e969a7476b8393cf152593a99f90fa58659d60d838e6e36c9f2675ab"
+    },
+    {
+      "file": "reviews/README.md",
+      "bytes": 477,
+      "sha256": "d9b6212388d75470f2c9f93bbb5b6b97b01fc0ff38fdee3042c8891479fc0266"
+    }
+  ]
+}

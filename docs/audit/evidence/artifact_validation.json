@@ -1,0 +1,67 @@
+{
+  "checked_date": "2026-11-10",
+  "all_passed": true,
+  "checks": [
+    {
+      "check": "Baseline equals ZIP",
+      "passed": true,
+      "detail": "30 files"
+    },
+    {
+      "check": "All baseline feature IDs covered",
+      "passed": true,
+      "detail": "38 total features including additions"
+    },
+    {
+      "check": "Traceability cells nonempty",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "Feature IDs unique",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "Finding IDs unique",
+      "passed": true,
+      "detail": "35 findings"
+    },
+    {
+      "check": "Finding severity valid",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "Each finding links valid owner decision",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "Markdown local file links resolve",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "check": "Mockup links/images local and resolve",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "check": "Mockup has no scripts or product forms",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "Comparison baseline images unchanged",
+      "passed": true,
+      "detail": "3 copied images"
+    },
+    {
+      "check": "Cost scenario arithmetic reconciles",
+      "passed": true,
+      "detail": ""
+    }
+  ],
+  "limitations": "Artifact and arithmetic checks only; no production security, live integration, legal or usability certification."
+}
