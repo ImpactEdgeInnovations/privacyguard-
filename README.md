@@ -19,6 +19,8 @@ Open [http://127.0.0.1:8767](http://127.0.0.1:8767). Choose **Consumer A**, save
 
 The sandbox binds to loopback and uses selectable fictional accounts. Keep real reports and personal details out of this environment. It stores fixture records in an embedded PostgreSQL database under `.local-data/postgres`. Restart the server after changing the SQL schema. To start an isolated data set, set `PRIVACYGUARD_DB_PATH` to a new local directory before starting the server. Move aside the old data directory while the server is stopped if you need to keep a copy.
 
+The separate [identity preview](docs/IDENTITY_PREVIEW.md) starts with `npm run identity:dev` and verifies sessions against the configured Supabase project. It ends at the access check. The fictional case workspace uses its own database and fixture sessions.
+
 ## Implemented
 
 - **PG03 / PG05:** Save, revise and submit description-only reports. Sender and date are optional. The submitted revision has one receipt and one staff task.
