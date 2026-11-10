@@ -1,6 +1,8 @@
 import assert from 'node:assert/strict';
+import { createHash, createHmac } from 'node:crypto';
 import { test } from 'node:test';
-import { decideIdentity, previewSettings } from '../lib/identity/policy.ts';
+import { createPreviewClient, readPreviewIdentity } from '../lib/identity/client.ts';
+import { decideIdentity, identityCallback, previewSettings } from '../lib/identity/policy.ts';
 
 const issuer = 'https://staging-project.supabase.co/auth/v1';
 const claims = {
@@ -52,4 +54,65 @@ test('staff and privacy roles require an active verified TOTP factor and signed 
     assert.deepEqual(decideIdentity(verified, staff, issuer), { kind: 'verified', role });
     assert.deepEqual(decideIdentity(verified, { ...staff, factors: [] }, issuer), { kind: 'mfa', factors: [] });
   }
+});
+
+test('the Supabase SDK carries a PKCE verifier across requests and rechecks eligibility', async t => {
+  const encode = (value: object) => Buffer.from(JSON.stringify(value)).toString('base64url');
+  const now = Math.floor(Date.now() / 1000);
+  const tokenBody = encode({ alg: 'HS256', typ: 'JWT' }) + '.' + encode({ ...claims, exp: now + 3600, iat: now });
+  const token = tokenBody + '.' + createHmac('sha256', 'fixture-only-signing-key').update(tokenBody).digest('base64url');
+  let requestedChallenge = '';
+  let enabled = true;
+  let exchanged = false;
+  t.mock.method(globalThis, 'fetch', async (input: string | URL | Request, init?: RequestInit) => {
+    const url = new URL(input instanceof Request ? input.url : input);
+    assert.equal(url.origin, 'https://staging-project.supabase.co');
+    if (url.pathname === '/auth/v1/otp') {
+      const body = JSON.parse(String(init?.body));
+      assert.equal(body.create_user, false);
+      assert.equal(url.searchParams.get('redirect_to'), identityCallback);
+      assert.equal(body.code_challenge_method, 's256');
+      requestedChallenge = body.code_challenge;
+      return Response.json({});
+    }
+    if (url.pathname === '/auth/v1/token' && url.searchParams.get('grant_type') === 'pkce') {
+      const body = JSON.parse(String(init?.body));
+      assert.equal(body.auth_code, 'synthetic-auth-code');
+      assert.ok(requestedChallenge);
+      assert.equal(createHash('sha256').update(body.code_verifier).digest('base64url'), requestedChallenge);
+      exchanged = true;
+      return Response.json({ access_token: token, refresh_token: 'fixture-refresh', expires_in: 3600, token_type: 'bearer', user });
+    }
+    if (url.pathname === '/auth/v1/user') {
+      assert.equal(new Headers(init?.headers).get('authorization'), 'Bearer ' + token);
+      return Response.json({ ...user, app_metadata: { ...user.app_metadata, privacyguard_enabled: enabled } });
+    }
+    throw new Error('Unexpected fixture endpoint: ' + url.pathname);
+  });
+
+  const cookies = new Map<string, string>();
+  const client = () => createPreviewClient({
+    url: 'https://staging-project.supabase.co', issuer, key: 'sb_publishable_fixture',
+  }, {
+    getAll: () => Array.from(cookies, ([name, value]) => ({ name, value })),
+    setAll: changes => {
+      for (const { name, value, options } of changes) {
+        assert.equal(options.httpOnly, true);
+        assert.equal(options.path, '/identity');
+        if (options.maxAge === 0) cookies.delete(name);
+        else cookies.set(name, value);
+      }
+    },
+  });
+
+  const request = await client().auth.signInWithOtp({
+    email: 'tester@example.invalid', options: { shouldCreateUser: false, emailRedirectTo: identityCallback },
+  });
+  assert.equal(request.error, null);
+  const confirmation = await client().auth.exchangeCodeForSession('synthetic-auth-code');
+  assert.equal(confirmation.error, null);
+  assert.ok(exchanged);
+  assert.deepEqual(await readPreviewIdentity(client(), issuer), { kind: 'verified', role: 'consumer' });
+  enabled = false;
+  assert.deepEqual(await readPreviewIdentity(client(), issuer), { kind: 'denied' });
 });
