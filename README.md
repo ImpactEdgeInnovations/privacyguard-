@@ -4,6 +4,8 @@ Phase 1 development sandbox for private, description-only intake and assigned st
 
 The [v6 UI prototype](prototype/v6/prototype/index.html) is the visual reference. The shield, navy and teal palette, card layout and mobile navigation come from v6. The [approved boards](docs/audit/mockups/index.html) specify the simpler case-first home and case-scoped Privacy screen. The same references are recorded in [AGENTS.md](AGENTS.md).
 
+The [reviewer handoff record](docs/REVIEWER_HANDOFF.md) describes returning a task, the access boundary and the verified screens.
+
 Start with the [current roadmap](docs/ROADMAP.md) and [milestones](docs/MILESTONES.md). The [audit](docs/audit/README.md), [Phase 0 materials](docs/phase-0/README.md) and [original handoff](prototype/v6/README.md) sit alongside the implementation.
 
 ## Run locally
@@ -18,6 +20,8 @@ npm run dev
 Open [http://127.0.0.1:8767](http://127.0.0.1:8767). Choose **Consumer A**, save a fictional report, then submit it. Switch to **Reviewer A**, claim the task and ask for a detail or complete screening. Switch back to the consumer to see the request. Consumer B and Reviewer B are separate fixture identities for access checks.
 
 The sandbox binds to loopback and uses selectable fictional accounts. Keep real reports and personal details out of this environment. It stores fixture records in an embedded PostgreSQL database under `.local-data/postgres`. Restart the server after changing the SQL schema. To start an isolated data set, set `PRIVACYGUARD_DB_PATH` to a new local directory before starting the server. Move aside the old data directory while the server is stopped if you need to keep a copy.
+
+The separate [identity preview](docs/IDENTITY_PREVIEW.md) starts with `npm run identity:dev` and verifies sessions against the configured Supabase project. It includes first authenticator setup for enabled staff and privacy reviewers. See the [setup evidence and assisted recovery specification](docs/ACCOUNT_RECOVERY.md). It ends at the access check. The fictional case workspace uses its own database and fixture sessions.
 
 ## Implemented
 

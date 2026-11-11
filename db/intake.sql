@@ -52,6 +52,16 @@ create table if not exists pg_intake.events (
   happened_at timestamptz not null default now()
 );
 
+alter table pg_intake.tasks add column if not exists returned_at timestamptz;
+alter table pg_intake.events add column if not exists return_reason text;
+alter table pg_intake.events drop constraint if exists events_kind_check;
+alter table pg_intake.events add constraint events_kind_check
+  check (kind in ('saved', 'submitted', 'claimed', 'asked_detail', 'detail_added', 'reviewed', 'returned'));
+alter table pg_intake.events drop constraint if exists events_return_reason_check;
+alter table pg_intake.events add constraint events_return_reason_check
+  check ((kind = 'returned') = (return_reason is not null)
+    and (return_reason is null or return_reason in ('availability', 'capacity', 'expertise', 'other')));
+
 create index if not exists cases_owner_updated on pg_intake.cases (owner_id, updated_at desc);
 create index if not exists tasks_state_created on pg_intake.tasks (state, created_at);
 create index if not exists tasks_assignee_state on pg_intake.tasks (assignee_id, state, created_at);
@@ -113,7 +123,8 @@ drop policy if exists task_staff_write on pg_intake.tasks;
 create policy task_staff_write on pg_intake.tasks for update to privacyguard_runtime
   using (current_setting('privacyguard.actor_role', true) = 'staff'
     and (assignee_id is null or assignee_id = current_setting('privacyguard.actor_id', true)))
-  with check (assignee_id = current_setting('privacyguard.actor_id', true));
+  with check (assignee_id = current_setting('privacyguard.actor_id', true)
+    or (assignee_id is null and state = 'unassigned' and returned_at is not null));
 
 drop policy if exists event_read on pg_intake.events;
 create policy event_read on pg_intake.events for select to privacyguard_runtime

@@ -1,0 +1,35 @@
+# Phase 1 identity preview
+
+The preview isolates Supabase Auth from the fictional case workspace. It verifies a consumer, staff or privacy reviewer session and shows the result on the v6-aligned sign-in screen. The next milestone is to verify invited test users and connect a separately reviewed case authorization layer.
+
+## Run on loopback
+
+Add the selected development project's API URL and **publishable** key to the ignored `.env.local` file. Keep service keys and SMTP credentials outside the repository.
+
+```dotenv
+PRIVACYGUARD_SUPABASE_URL=https://YOUR_PROJECT_REF.supabase.co
+PRIVACYGUARD_SUPABASE_PUBLISHABLE_KEY=YOUR_PUBLISHABLE_KEY
+```
+
+Run `npm run identity:dev` and open [http://127.0.0.1:8768/identity](http://127.0.0.1:8768/identity). The preview requires this exact origin. The regular `npm run dev` still runs the separate fictional workspace.
+
+## Provider settings
+
+1. Use invite-only signup with email confirmation enabled. Enable authenticator-app TOTP for staff and privacy reviewers.
+2. Allow the exact redirect `http://127.0.0.1:8768/identity/callback`. Open the sign-in link in the browser that requested it so the stored PKCE verifier can be used. The default magic-link template works with this callback. If the chosen template sends an email code, use the code entry form instead. [Supabase PKCE flow](https://supabase.com/docs/guides/auth/sessions/pkce-flow)
+3. For custom email delivery, choose the verified sender and domain-scoped sending credential in Resend. Use `smtp.resend.com`, port `465`, and username `resend`. Enter the credential as the SMTP password in the approved project's dashboard. The project owner completes and saves that field directly. [Resend SMTP settings](https://resend.com/changelog/smtp-service)
+4. Provision only agreed tester identities. A trusted administrator sets `app_metadata.privacyguard_enabled` to `true` and `app_metadata.privacyguard_role` to `consumer`, `staff` or `privacy`. Staff and privacy testers can enroll their first TOTP factor in the preview after an administrator enables their role. Existing verified factors cannot be replaced through this setup flow. See [setup and assisted recovery](ACCOUNT_RECOVERY.md). Live enrollment and recovery need their own verification.
+
+## Evidence and acceptance
+
+The browser session is scoped to the identity route. The server verifies claims and fetches the current user record to check eligibility and role. Staff and privacy roles require AAL2, a TOTP authentication claim and a still-enrolled verified factor. User-editable metadata cannot assign a role.
+
+For live staging verification, use an owner-approved address. Check magic-link receipt and same-browser exchange, a denied invalid callback, and sign-out. For staff, record the AAL1 prompt, TOTP verification and denial after eligibility is withdrawn. Record delivery and access results without codes, keys, addresses or session tokens. Keep all case data fictional during this verification.
+
+On 10 November 2026 the approved Supabase project started with zero Auth users and no application tables in the checked schemas. Invite-only signup and the exact loopback redirect were saved. Email confirmation and TOTP were already enabled, and the Auth health check returned HTTP 200. The owner saved the Resend SMTP credential, Supabase displayed the invited test user, and Resend marked the single test invitation **Delivered**. The invitation tests delivery. It does not establish mailbox interaction or a verified app session.
+
+The SDK transport test uses a mocked Auth endpoint and checks that the same PKCE verifier survives the email request and callback in separate request clients. It also checks that current eligibility is re-read after sign-in. The live sequence is to accept the invitation, verify confirmation in Auth, assign the preview role through the trusted administrator and verify a new same-browser sign-in from the preview. A dashboard invitation may redirect to the project's default site URL. Use the preview itself to start the sign-in test that exercises the PKCE callback. Staff TOTP enrollment, verification and recovery remain separate staging checks.
+
+On 11 November 2026, first authenticator setup was implemented and checked using a synthetic Auth service and the real SDK. The browser checks covered QR rendering, mobile error feedback, cancel/restart, successful setup, a returning AAL1 challenge, recovery guidance and sign-out. All committed setup screenshots contain synthetic material. No live tester role, factor or session was changed by those checks. Administrative recovery remains a proposed workflow. See [the recovery record and pending decisions](ACCOUNT_RECOVERY.md).
+
+A read-only Supabase check on 11 November 2026 found the single approved invited account still unconfirmed, with no recorded sign-in and no preview eligibility assigned. Live acceptance remains pending. No additional email was sent.

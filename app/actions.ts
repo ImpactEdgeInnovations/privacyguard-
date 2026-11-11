@@ -3,7 +3,7 @@
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 import { currentActor, localEnabled, sessionCookie, store } from '../lib/local';
-import { personas, privacyKinds, readDraft, readId, readRevision, WorkflowError, type PrivacyKind } from '../lib/intake';
+import { personas, privacyKinds, readDraft, readId, readRevision, WorkflowError, type PrivacyKind, type ReturnReason } from '../lib/intake';
 
 export async function signIn(form: FormData) {
   if (!localEnabled()) redirect('/');
@@ -79,11 +79,13 @@ export async function updateReport(form: FormData) {
         await db.addDetail(actor, id, revision, String(form.get('detail') ?? '').trim());
       } else if (action === 'ask' || action === 'complete') {
         await db.review(actor, id, revision, action === 'ask' ? 'detail' : 'reviewed', String(form.get('prompt') ?? '').trim());
+      } else if (action === 'return') {
+        await db.returnTask(actor, id, revision, String(form.get('reason') ?? '') as ReturnReason);
       } else {
         throw new WorkflowError('Choose an available action.');
       }
     }
-    target = '/?case=' + id;
+    target = action === 'return' ? '/?view=home&message=Task+returned+to+the+work+queue.' : '/?case=' + id;
   } catch (error) {
     if (!(error instanceof WorkflowError)) throw error;
     const params = new URLSearchParams();
