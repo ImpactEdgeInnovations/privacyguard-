@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { currentActor, localEnabled, store } from '../lib/local';
-import { channels, goals, newReportId, readId, type Actor, type Case, type CaseEvent, type QueueTask } from '../lib/intake';
+import { channels, goals, newReportId, readId, returnReasons, type Actor, type Case, type CaseEvent, type QueueTask } from '../lib/intake';
 import { signIn, signOut, updateReport } from './actions';
 import { PrivacyCenter, PrivacyQueue } from './privacy';
 import { ConsumerNavigation, Icon, type ConsumerPage } from './workspace-nav';
@@ -12,7 +12,7 @@ const status: Record<Case['state'], string> = {
 };
 const events: Record<CaseEvent['kind'], string> = {
   saved: 'Draft saved', submitted: 'Report received', claimed: 'Reviewer assigned', asked_detail: 'Reviewer requested a detail',
-  detail_added: 'You added a detail', reviewed: 'Screening completed',
+  detail_added: 'You added a detail', reviewed: 'Screening completed', returned: 'Review returned to the work queue',
 };
 const shortId = (id: string) => 'PG-' + id.slice(0, 8).toUpperCase();
 const timeFormat = new Intl.DateTimeFormat('en-KE', { dateStyle: 'medium', timeStyle: 'short', timeZone: 'Africa/Nairobi' });
@@ -112,7 +112,7 @@ function StaffQueue({ tasks }: { tasks: QueueTask[] }) {
     <div className="queue-grid">{groups.map(group => <section key={group.name} className="panel queue">
       <h2>{group.name} <span className="count">{group.items.length}</span></h2>
       {group.items.length ? <ul className="rows">{group.items.map(task => <li key={task.case_id}>
-        <div className="task-row"><div><strong>{shortId(task.case_id)}</strong><p>{task.case_state === 'needs_detail' ? 'Waiting for consumer' : task.case_state ? status[task.case_state] : 'Description only'}</p></div>
+        <div className="task-row"><div><strong>{shortId(task.case_id)}</strong><p>{task.case_state === 'needs_detail' ? 'Waiting for consumer' : task.case_state ? status[task.case_state] : task.returned_at ? 'Returned for review' : 'Description only'}</p></div>
           {task.state === 'unassigned' ? <form action={updateReport}>
             <input type="hidden" name="id" value={task.case_id} /><input type="hidden" name="operation" value="claim" />
             <button className="secondary" aria-label={'Claim ' + shortId(task.case_id)}>Claim</button>
@@ -162,9 +162,18 @@ function CaseView({ report, timeline, actor }: { report: Case; timeline: CaseEve
             <div className="separator"><ActionForm report={report} operation="complete" button="Complete screening" /></div>
           </section>}
           {report.state === 'reviewed' && <section className="panel feature-block"><h2>Intake screening is complete</h2><p className="muted">This records the PrivacyGuard review of your report.</p></section>}
+          {actor.role === 'staff' && (report.state === 'in_review' || report.state === 'needs_detail') &&
+            <section className="panel"><details><summary>Return this task to the work queue</summary>
+              <p className="muted">Another reviewer can claim it. You will lose access to this case. Any question awaiting the consumer’s reply stays open.</p>
+              <ActionForm report={report} operation="return" button="Return task">
+                <label>Reason for returning<select name="reason" required defaultValue=""><option value="" disabled>Choose a reason</option>
+                  {Object.entries(returnReasons).map(([key, label]) => <option key={key} value={key}>{label}</option>)}
+                </select></label>
+              </ActionForm>
+            </details></section>}
         </>}
       </div>
-      <section className="panel timeline"><p className="eyebrow">Case activity</p><h2>What happened</h2><ol>{timeline.map((event, index) => <li key={index}><strong>{event.kind === 'detail_added' && actor.role === 'staff' ? 'Consumer added a detail' : events[event.kind]}</strong><span>{timeFormat.format(event.happened_at)} EAT</span></li>)}</ol></section>
+      <section className="panel timeline"><p className="eyebrow">Case activity</p><h2>What happened</h2><ol>{timeline.map((event, index) => <li key={index}><strong>{event.kind === 'detail_added' && actor.role === 'staff' ? 'Consumer added a detail' : events[event.kind]}</strong>{actor.role === 'staff' && event.return_reason && <span>{returnReasons[event.return_reason]}</span>}<span>{timeFormat.format(event.happened_at)} EAT</span></li>)}</ol></section>
     </div>
   </>;
 }

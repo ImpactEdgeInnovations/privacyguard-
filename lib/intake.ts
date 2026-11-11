@@ -15,6 +15,11 @@ export type Actor = (typeof personas)[keyof typeof personas];
 
 export const channels = { sms: 'Text message', call: 'Phone call', email: 'Email', other: 'Other' } as const;
 export const goals = { stop: 'Stop the marketing', understand: 'Understand how my details were obtained', unsure: 'I’m still deciding' } as const;
+export const returnReasons = {
+  availability: 'Availability changed', capacity: 'Capacity or workload',
+  expertise: 'Needs another reviewer’s expertise', other: 'Other operational reason',
+} as const;
+export type ReturnReason = keyof typeof returnReasons;
 
 type Draft = {
   channel: keyof typeof channels;
@@ -40,11 +45,13 @@ export type QueueTask = {
   state: 'unassigned' | 'assigned' | 'done';
   case_state: Case['state'] | null;
   created_at: Date;
+  returned_at: Date | null;
 };
 
 export type CaseEvent = {
-  kind: 'saved' | 'submitted' | 'claimed' | 'asked_detail' | 'detail_added' | 'reviewed';
+  kind: 'saved' | 'submitted' | 'claimed' | 'asked_detail' | 'detail_added' | 'reviewed' | 'returned';
   happened_at: Date;
+  return_reason: ReturnReason | null;
 };
 
 export const privacyKinds = { copy: 'Copy of records', deletion: 'Deletion request' } as const;
@@ -296,7 +303,7 @@ export class IntakeStore {
           'caseId', c.id, 'channel', c.channel, 'reportedSender', c.sender, 'receivedOn', c.received_on,
           'goal', c.goal, 'description', c.description, 'status', c.state, 'submittedAt', c.receipt_at,
           'currentQuestion', c.detail_prompt, 'followups', c.followups,
-          'activity', coalesce((select jsonb_agg(jsonb_build_object('kind', e.kind, 'at', e.happened_at) order by e.id)
+          'activity', coalesce((select jsonb_agg(jsonb_build_object('kind', e.kind, 'at', e.happened_at, 'returnReason', e.return_reason) order by e.id)
              from pg_intake.events e where e.case_id = c.id), '[]'::jsonb)
         ) as data
         from pg_intake.privacy_requests r
@@ -317,7 +324,7 @@ export class IntakeStore {
       const { rows } = await tx.query<Case>(`select ${caseFields} from pg_intake.cases where id = $1`, [id]);
       if (!rows[0]) return null;
       const timeline = await tx.query<CaseEvent>(
-        'select kind, happened_at from pg_intake.events where case_id = $1 order by id', [id],
+        'select kind, happened_at, return_reason from pg_intake.events where case_id = $1 order by id', [id],
       );
       return { report: rows[0], timeline: timeline.rows };
     });
@@ -379,7 +386,7 @@ export class IntakeStore {
   queue(actor: Actor) {
     this.requireRole(actor, 'staff');
     return this.scoped(actor, async tx => (await tx.query<QueueTask>(
-      `select t.case_id, t.state, c.state as case_state, t.created_at
+      `select t.case_id, t.state, c.state as case_state, t.created_at, t.returned_at
        from pg_intake.tasks t left join pg_intake.cases c on c.id = t.case_id
        where t.state <> 'done' order by t.created_at, t.case_id`,
     )).rows);
@@ -394,10 +401,35 @@ export class IntakeStore {
       );
       if (!result.rows.length) throw new WorkflowError('That task is unavailable or already assigned.');
       const changed = await tx.query(
-        "update pg_intake.cases set state = 'in_review', updated_at = now() where id = $1 and state = 'received' returning id", [id],
+        `update pg_intake.cases set state = case when state = 'received' then 'in_review' else state end,
+           updated_at = now() where id = $1 and state in ('received', 'in_review', 'needs_detail') returning id`, [id],
       );
       if (!changed.rows.length) throw new WorkflowError('The report is unavailable for review.');
       await this.event(tx, actor, id, 'claimed');
+    });
+  }
+
+  returnTask(actor: Actor, id: string, revision: number, reason: ReturnReason) {
+    this.requireRole(actor, 'staff');
+    if (!Object.hasOwn(returnReasons, reason)) throw new WorkflowError('Choose why this task needs another reviewer.');
+    return this.scoped(actor, async tx => {
+      const changed = await tx.query(
+        `update pg_intake.cases set revision = revision + 1, updated_at = now()
+         where id = $1 and revision = $2 and state in ('in_review', 'needs_detail')
+           and exists (select 1 from pg_intake.tasks t where t.case_id = $1 and t.state = 'assigned' and t.assignee_id = $3)
+         returning id`, [id, revision, actor.id],
+      );
+      if (!changed.rows.length) throw new WorkflowError('The task is unavailable or has changed. Refresh the work queue.');
+      // Append while this reviewer still has case scope. The transaction then removes that scope.
+      await tx.query(
+        "insert into pg_intake.events (case_id, actor_id, kind, return_reason) values ($1, $2, 'returned', $3)",
+        [id, actor.id, reason],
+      );
+      const returned = await tx.query(
+        `update pg_intake.tasks set state = 'unassigned', assignee_id = null, returned_at = now()
+         where case_id = $1 and state = 'assigned' and assignee_id = $2 returning case_id`, [id, actor.id],
+      );
+      if (!returned.rows.length) throw new WorkflowError('The task is unavailable or has changed. Refresh the work queue.');
     });
   }
 

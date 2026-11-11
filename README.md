@@ -4,6 +4,8 @@ Phase 1 development sandbox for private, description-only intake and assigned st
 
 The [v6 UI prototype](prototype/v6/prototype/index.html) is the visual reference. The shield, navy and teal palette, card layout and mobile navigation come from v6. The [approved boards](docs/audit/mockups/index.html) specify the simpler case-first home and case-scoped Privacy screen. The same references are recorded in [AGENTS.md](AGENTS.md).
 
+The [reviewer handoff record](docs/REVIEWER_HANDOFF.md) describes returning a task, the access boundary and the verified screens.
+
 Start with the [current roadmap](docs/ROADMAP.md) and [milestones](docs/MILESTONES.md). The [audit](docs/audit/README.md), [Phase 0 materials](docs/phase-0/README.md) and [original handoff](prototype/v6/README.md) sit alongside the implementation.
 
 ## Run locally
