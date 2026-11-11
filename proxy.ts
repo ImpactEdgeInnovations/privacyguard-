@@ -18,6 +18,7 @@ export async function proxy(request: NextRequest) {
     await client.auth.getClaims();
   }
   response.headers.set('Cache-Control', 'private, no-store');
+  response.headers.set('Referrer-Policy', 'no-referrer');
   return response;
 }
 

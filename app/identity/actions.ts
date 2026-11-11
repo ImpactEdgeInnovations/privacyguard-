@@ -5,6 +5,7 @@ import { redirect } from 'next/navigation';
 import { readPreviewIdentity } from '../../lib/identity/client';
 import { identityClient } from '../../lib/identity/next';
 import { identityCallback, identityCookie } from '../../lib/identity/policy';
+import { beginAuthenticatorSetup, cancelAuthenticatorSetup, verifyFirstAuthenticator, type SetupState } from '../../lib/identity/enrollment';
 
 function emailFrom(form: FormData) {
   const value = String(form.get('email') ?? '').trim();
@@ -42,6 +43,24 @@ export async function confirmAuthenticator(form: FormData) {
   const result = await client.auth.mfa.challengeAndVerify({ factorId, code });
   if (result.error) redirect('/identity?notice=mfa');
   redirect('/identity');
+}
+
+export async function startAuthenticatorSetup(_previous: SetupState, _form: FormData): Promise<SetupState> {
+  const { client, issuer } = await identityClient(true);
+  return beginAuthenticatorSetup(client, issuer);
+}
+
+export async function finishAuthenticatorSetup(_previous: { message?: string }, form: FormData): Promise<{ message?: string }> {
+  const { client, issuer } = await identityClient(true);
+  const verified = await verifyFirstAuthenticator(client, issuer, String(form.get('factor') ?? ''), String(form.get('code') ?? '').trim());
+  if (!verified) return { message: 'That code could not be verified. Try the current code. If setup has expired or your access changed, cancel and return to the access check.' };
+  redirect('/identity');
+}
+
+export async function discardAuthenticatorSetup(form: FormData) {
+  const { client, issuer } = await identityClient(true);
+  const cancelled = await cancelAuthenticatorSetup(client, issuer, String(form.get('factor') ?? ''));
+  redirect(cancelled ? '/identity' : '/identity?notice=setup');
 }
 
 export async function exitIdentityPreview() {

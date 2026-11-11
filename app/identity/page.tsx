@@ -1,8 +1,9 @@
 import Link from 'next/link';
-import { readPreviewIdentity } from '../../lib/identity/client';
+import { readPreviewContext } from '../../lib/identity/client';
 import { identityClient } from '../../lib/identity/next';
 import { Icon } from '../workspace-nav';
 import { confirmAuthenticator, confirmEmailCode, exitIdentityPreview, requestSignInEmail } from './actions';
+import { AuthenticatorSetup } from './authenticator-setup';
 
 export const dynamic = 'force-dynamic';
 
@@ -11,13 +12,14 @@ const notices: Record<string, string> = {
   code: 'That code could not be verified. Check the email and enter the latest code.',
   link: 'That sign-in link could not be verified. Request a new one and open it in this browser.',
   mfa: 'That authenticator code could not be verified. Check the selected device and try again.',
+  setup: 'Setup could not be completed. If you entered an incorrect code or left the setup page, start setup again and replace the unfinished entry in your authenticator app.',
 };
 
 const roles = { consumer: 'Consumer', staff: 'Staff reviewer', privacy: 'Privacy reviewer' };
 
 export default async function IdentityPreview({ searchParams }: { searchParams: Promise<{ step?: string; notice?: string }> }) {
   const { client, issuer } = await identityClient(false);
-  const identity = await readPreviewIdentity(client, issuer);
+  const { identity, user } = await readPreviewContext(client, issuer);
   const params = await searchParams;
   const codeStep = params.step === 'code';
   const sentStep = params.step === 'sent';
@@ -32,7 +34,7 @@ export default async function IdentityPreview({ searchParams }: { searchParams: 
     </div></header>
     <div className="sandbox"><div className="shell"><strong>Identity preview</strong> · Invited test accounts only.</div></div>
     <main id="content" className="shell workspace">
-      <section className="hero">
+      <section className="hero identity-hero">
         <div className="hero-story">
           <p className="eyebrow icon-text"><Icon name="lock" /> Private workspace</p>
           <h1>Verify your access</h1>
@@ -65,7 +67,7 @@ export default async function IdentityPreview({ searchParams }: { searchParams: 
             <p className="muted">Ask the staging administrator to check your invitation. You can sign out and try another invited account.</p>
           </>}
           {identity.kind === 'mfa' && <>
-            <h2 id="identity-step">Confirm your authenticator</h2>
+            <h2 id="identity-step">{identity.factors.length ? 'Confirm your authenticator' : 'Set up your authenticator'}</h2>
             {identity.factors.length ? <>
               <p className="muted">Enter the current six-digit code from your enrolled authenticator.</p>
               <form action={confirmAuthenticator} className="form-stack">
@@ -74,7 +76,12 @@ export default async function IdentityPreview({ searchParams }: { searchParams: 
                 <label>Authenticator code<input name="code" inputMode="numeric" autoComplete="one-time-code" required pattern="[0-9]{6}" maxLength={6} /></label>
                 <div><button className="primary">Verify authenticator</button></div>
               </form>
-            </> : <p className="muted">A verified authenticator is required. Ask the staging administrator to arrange enrollment or recovery.</p>}
+            </> : user?.factors?.some(factor => factor.status === 'verified') ?
+              <p className="muted">Your account has another verified factor. Ask your administrator to arrange authenticator setup through a verified session.</p> : <AuthenticatorSetup />}
+            <details className="separator identity-help"><summary>Lost access to your authenticator?</summary>
+              <p>Contact the administrator who invited you using your established support channel. They must verify your identity and review account access before arranging a reset.</p>
+              <p>Never send an email code, authenticator code or setup key to anyone. Signing in again by email will still require your enrolled authenticator.</p>
+            </details>
           </>}
           {identity.kind === 'verified' && <>
             <p className="eyebrow">Access check passed</p>

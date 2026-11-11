@@ -120,6 +120,14 @@ textarea { resize: vertical; }
 .timeline li span { display: block; color: var(--muted); font-size: .85rem; margin-top: .2rem; }
 .separator { border-top: 1px solid var(--line); margin-top: 1rem; }
 .notice { background: #fbebca; border: 1px solid #c39240; border-radius: .7rem; padding: .7rem .9rem; margin-bottom: 1rem; }
+.setup-steps { padding-left: 1.3rem; margin: .5rem 0; }
+.setup-steps li { margin: .6rem 0; }
+.authenticator-qr { display: block; max-width: 100%; height: auto; margin: 1rem 0; background: white; }
+.setup-key { overflow-wrap: anywhere; font-family: monospace; user-select: all; }
+.identity-help { padding-top: 1rem; }
+.identity-hero { align-items: start; }
+summary { cursor: pointer; }
+button:disabled { opacity: .65; cursor: wait; }
 .skip { position: absolute; z-index: 1; left: .5rem; top: .5rem; transform: translateY(-200%); background: white; padding: .5rem; }
 .skip:focus { transform: translateY(0); }
 @media (max-width: 690px) {
